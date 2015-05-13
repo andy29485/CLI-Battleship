@@ -2,10 +2,10 @@ class Ship {
   private byte anPos;      //First 4 bits are X-pos; Last 4 are Y-pos(0-9)
   private byte abPartsHit; //Each bit(starting from left) prepresents part
                            //  the ship that [has|has not] been hit
-  private byte anType;     //Fifth bit will be orientation(0:vert|1:horiz)
-                           //  Last 3 are size(2-5)
-                           //  If it is a sub then the 4th bit will be set
-                           //  First three bits are used to determine ship
+  private byte anType;     //Sixth bit will be orientation(0:vert|1:horiz)
+                           //  Last 2 are size(2-5 -> 0-3)
+                           //  If it is a sub then the 5th bit will be set
+                           //  First four  bits are used to determine ship
                            //    colour.
   
   public Ship() {
@@ -15,14 +15,20 @@ class Ship {
   }
   
   public Ship(int nPosX, int nPosY, boolean bVertical, int nSize) {
-    anPos      = (byte)(nPosX     <<     4  | nPosY  );
-    anType     = (byte)((bVertical ? 0 : 8) | nSize&7);
+    anPos      = (byte)(nPosX << 4          | nPosY  );
+    anType     = (byte)((bVertical ? 0 : 4) | nSize&3);
     abPartsHit = 0;
   }
   
   public Ship(int nPosX, int nPosY, int nOrientation, int nSize) {
     anPos      = (byte)(nPosX << 4     | nPosY  );
-    anType     = (byte)(8*nOrientation | nSize&7);
+    anType     = (byte)(4*nOrientation | nSize&3);
+    abPartsHit = 0;
+  }
+  
+  public Ship(int nPosX, int nPosY, int nOrientation, int nSize, boolean isSub) {
+    anPos      = (byte)(nPosX << 4     | nPosY);
+    anType     = (byte)(4*nOrientation | nSize&3 | isSub*8);
     abPartsHit = 0;
   }
   
@@ -47,21 +53,21 @@ class Ship {
   }
   
   public int getSize() {
-    return anType & 7;
+    return (anType & 3) + 2;
   }
   
   public String getName() {
-    switch (anType&7) {
-      case 2:
+    switch (anType&3) {
+      case 0:
         return "Destroyer";
       
-      case 3:
+      case 1:
         return (anType&16) > 0 ? "Submarine" : "Cruiser";
       
-      case 4:
+      case 2:
         return "Battleship";
       
-      case 5:
+      case 3:
         return "Carrier";
       
       default:
