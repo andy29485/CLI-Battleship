@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 class GameBoard {
   public static final String ANSI_RESET   = "\u001B[0m";
   public static final String ANSI_BLACK   = "\u001B[30m";
@@ -10,19 +12,118 @@ class GameBoard {
   public static final String ANSI_WHITE   = "\u001B[37m";
   
   private short[] asGrid;
+  private Ship[]  aShips;
   
   public GameBoard() {
     asGrid = new short[10];
+    aShips = new Ship[5];
+    
+    Scanner keyboard = Battleship.keyboard;
+    
+    for(int i=0; i<5; i++) {
+      if(i==4)
+        aShips[i] = new Ship(0, 0, true, 1, true);
+      else
+        aShips[i] = new Ship(0, 0, true, i);
+      
+      System.out.printf("Position of new %s:\n  X(1-10): ", aShips[i]);
+      aShips[i].setX(keyboard.nextInt()-1); keyboard.nextLine();
+      
+      System.out.print("  Y(1-10): ");
+      aShips[i].setY(keyboard.nextInt()-1); keyboard.nextLine();
+      
+      System.out.print("  Set horizontal(y/n): ");
+      aShips[i].setHoriz(keyboard.next().matches("(?i)y.*"));
+      
+      //Debug stuff
+      //System.out.printf("\n%s:\n  Pos:  (%d, %d)\n  Size: %d\n\n",
+      //  aShips[i],
+      //  aShips[i].getX()+1,
+      //  aShips[i].getY()+1,
+      //  aShips[i].getSize());
+    }
   }
   
-  public String toString() {
-    System.out.println("+-+-+-+-+-+-+-+-+-+-+");
-    for(int i=0; i<10; i++) {
-      System.out.print("|");
-      for(int j=0; j<10; j++) {
-        
-      }
-      System.out.println("+-+-+-+-+-+-+-+-+-+-+");
+  public boolean allShipsSunk() {
+    for(Ship ship : aShips)
+      if(ship.isFloating()) return false;
+    return true;
+  }
+  
+  public String status() {
+    String strOut = "";
+    
+    for(Ship ship : aShips) {
+      strOut += String.format("%-10s - %s%s\n", ship,
+          ship.isFloating() ? ANSI_GREEN + "FLOATING" : ANSI_RED + "SUNK",
+          ANSI_RESET);
     }
+    
+    return strOut;
+  }
+  
+  public boolean getShot(int nPosX, int nPosY) {
+    if(nPosX > 10 || nPosY > 10)
+      return false;
+    
+    boolean wasHit = false;
+    
+    asGrid[nPosY] |= (short)Math.pow(2, nPosX);
+    for(Ship ship : aShips) {
+      wasHit = wasHit || ship.hit(nPosX, nPosY);
+    }
+    
+    return wasHit;
+  }
+  
+  //set isPlayer to false to dissable printing of ships(unless hit)
+  public String print(boolean isPlayer) {
+    String strOut = "+-+-+-+-+-+-+-+-+-+-+\n";
+    
+    for(int i=0; i<10; i++) {
+      strOut += "|";
+      
+      for(int j=0; j<10; j++) {
+        byte   nTile  = 0;
+        char   cTile  = '?';
+        String colour = "";
+        
+        for(Ship ship : aShips) {
+          nTile |= ship.statusOnTile(i, j);
+        }
+        switch(nTile) {
+          case 0:
+            if((asGrid[j] & (short)Math.pow(2, i)) > 0) {
+              colour = ANSI_YELLOW;
+              cTile  = '^';
+            }
+            else {
+              colour = ANSI_BLUE;
+              cTile  = '#';
+            }
+            break;
+          case 1:
+            if(isPlayer) {
+              colour = ANSI_GREEN;
+              cTile  = '@';
+            }
+            else {
+              colour = ANSI_BLUE;
+              cTile  = '#';
+            }
+            break;
+          default:
+            colour = ANSI_RED;
+            cTile  = '*';
+            break;
+        }
+		if(Battleship.ansi)
+			strOut += String.format("%s%s%s|", colour, cTile, ANSI_RESET);
+		else
+			strOut += String.format("%s|", cTile);
+      }
+      strOut += "\n+-+-+-+-+-+-+-+-+-+-+\n";
+    }
+    return strOut;
   }
 }
