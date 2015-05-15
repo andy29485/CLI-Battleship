@@ -66,7 +66,7 @@ class Ship {
   }
   
   public void setVert(boolean vert) {
-    if(vert)
+    if(!vert)
       anType &= ~(byte)4;
     else
       anType |= 4;
@@ -131,6 +131,10 @@ class Ship {
   
   public boolean isHorizontal() {
     return (anType&4) != 0;
+  }
+  
+  public boolean isVertical() {
+    return (anType&4) == 0;
   }
   
   public boolean hit(int nPosX, int nPosY) {
