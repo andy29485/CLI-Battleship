@@ -42,7 +42,9 @@ class GameBoard {
         if(nY < 0 || nX < 0|| (aShips[i].isHorizontal()
           ? (nY > 9 || nX + aShips[i].getSize() > 10)
           : (nX > 9 || nY + aShips[i].getSize() > 10) )) {
-            System.out.printf("Your %s has fallen off the Earth, The Divine Cosmic Turtle has given you another chance!\n", aShips[i]);
+            System.out.printf("Your %s has fallen off the Earth, The " +
+              "Divine Cosmic Turtle has given you another chance!\n",
+              aShips[i]);
           i--;
           continue;
         }
@@ -51,14 +53,18 @@ class GameBoard {
         aShips[i].setY(nY); 
       }
       else {
-        System.out.printf("(%s, %s) is not a valid position\n", strX, strY);
-          i--;
-          continue;
+        System.out.printf("(%s, %s) is not a valid position\n",
+          strX,
+          strY);
+        i--;
+        continue;
       }
       
       for(int j=0; j<i; j++) {
         if(aShips[i].intersects(aShips[j])) {
-          System.out.printf("Your %s is on top of %s \\o/\nTry again\n", aShips[i], aShips[j]);
+          System.out.printf("Your %s is on top of %s \\o/\nTry again\n",
+            aShips[i],
+            aShips[j]);
           i--;
           continue;
         }
@@ -151,7 +157,8 @@ class GameBoard {
             break;
         }
 		if(Battleship.ansi)
-			strOut += String.format("%s%s%s|", colour, cTile, ANSI_RESET);
+			strOut += String.format("%s%s%s|", colour,
+			                        cTile, ANSI_RESET);
 		else
 			strOut += String.format("%s|", cTile);
       }
