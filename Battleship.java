@@ -8,14 +8,14 @@ public class Battleship {
   public static void main(String[] args) {
     keyboard = new Scanner(System.in);
     
-	System.out.print("Do ANSI Colours work(Are you using *NIX)[y/n]: ");
-	ansi = keyboard.next().matches("(?i)y.*");
-	
+    System.out.print("Do ANSI Colours work(Are you using *NIX)[y/n]: ");
+    ansi = keyboard.next().matches("(?i)y.*"); keyboard.nextLine();
+    
+    clear();
     System.out.println("Player 1");
     GameBoard player1 = new GameBoard();
     
-	clear();
-	
+    clear();
     System.out.println("Player 2");
     GameBoard player2 = new GameBoard();
     
@@ -38,7 +38,7 @@ public class Battleship {
           
           System.out.print("  Y(1-10): ");
           y = keyboard.nextInt(); keyboard.nextLine();
-        } while (x >= 10 || y >= 10);
+        } while (x > 10 || y > 10 || x <= 0 || y <= 0);
         System.out.println(player2.getShot(y-1, x-1) ? "HIT" : "MISS");
       }
       else {
