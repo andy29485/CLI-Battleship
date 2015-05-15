@@ -54,8 +54,8 @@ class Ship {
     anPos = (byte)(getX() << 4 | nPosY);
   }
   
-  public void setHoriz(boolean horiz) {
-    if(horiz)
+  public void setVert(boolean vert) {
+    if(vert)
       anType &= ~(byte)4;
     else
       anType |= 4;
@@ -69,6 +69,42 @@ class Ship {
     return getSize() > parts;
   }
   
+  public boolean intersects(Ship ship) {
+    if(isHorizontal()) {
+      if(ship.isHorizontal()) {
+        return getY() == ship.getY() &&
+          ((this.getX()+this.getSize() > ship.getX() && this.getX() <= ship.getX()) ||
+           (ship.getX()+ship.getSize() > this.getX() && this.getX() >= ship.getX()));
+      }
+      else {
+        for(int i=this.getX(); i<this.getX()+this.getSize(); i++) {
+          for(int j=ship.getY(); j<ship.getY()+ship.getSize(); j++) {
+            if (i == ship.getX() && j == this.getY()) {
+              return true;
+            }
+          }
+        }
+      }
+    }
+    else {
+      if(!ship.isHorizontal()) {
+        return getX() == ship.getX() &&
+          ((this.getY()+this.getSize() > ship.getY() && this.getY() <= ship.getY()) ||
+           (ship.getY()+ship.getSize() > this.getY() && this.getY() >= ship.getY()));
+      }
+      else {
+        for(int i=this.getY(); i<this.getY()+this.getSize(); i++) {
+          for(int j=ship.getX(); j<ship.getX()+ship.getSize(); j++) {
+            if (i == ship.getY() && j == this.getX()) {
+              return true;
+            }
+          }
+        }
+      }
+    }
+    return false;
+  }
+  
   public boolean sectionHit(int nSection) {//Starts at 0(postion (x,y)) to size-1
     return (abPartsHit & (int)Math.pow(2, nSection)) > 0;
   }
@@ -78,7 +114,7 @@ class Ship {
   }
   
   public boolean isHorizontal() {
-    return (anType&4) > 0;
+    return (anType&4) != 0;
   }
   
   public boolean hit(int nPosX, int nPosY) {
