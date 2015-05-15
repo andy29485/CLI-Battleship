@@ -26,14 +26,44 @@ class GameBoard {
       else
         aShips[i] = new Ship(0, 0, true, i);
       
-      System.out.printf("Position of new %s:\n  X(1-10): ", aShips[i]);
-      aShips[i].setX(keyboard.nextInt()-1); keyboard.nextLine();
-      
-      System.out.print("  Y(1-10): ");
-      aShips[i].setY(keyboard.nextInt()-1); keyboard.nextLine();
-      
-      System.out.print("  Set horizontal(y/n): ");
-      aShips[i].setHoriz(keyboard.next().matches("(?i)y.*"));
+      setter:
+      do {
+        System.out.printf("Position of new %s:\n  X(1-10): ", aShips[i]);
+        String strX = keyboard.nextLine();
+        
+        System.out.print("  Y(1-10): ");
+        String strY = keyboard.nextLine();
+        
+        System.out.print("  Set vertical(y/n): ");
+        aShips[i].setVert(keyboard.nextLine().matches("(?i)y.*"));
+        
+        if(strX.matches("\\d+") && strY.matches("\\d+")) {
+          int nX = Integer.valueOf(strX)-1;
+          int nY = Integer.valueOf(strY)-1;
+          
+          if(nY < 0 || nX < 0|| (aShips[i].isHorizontal()
+            ? (nY > 9 || nX + aShips[i].getSize() > 10)
+            : (nX > 9 || nY + aShips[i].getSize() > 10) )) {
+              System.out.printf("Your %s has fallen off the Earth, The Divine Cosmic Turtle has given you another chance!\n", aShips[i]);
+              continue setter;
+          }
+
+          aShips[i].setX(nX);
+          aShips[i].setY(nY);
+        }
+        else {
+          System.out.printf("(%s, %s) is not a valid position\n", strX, strY);
+          continue setter;
+        }
+        
+        for(int j=0; j<i; j++) {
+          if(aShips[i].intersects(aShips[j])) {
+            System.out.printf("Your %s is on top of %s \\o/\nTry again\n", aShips[i], aShips[j]);
+            continue setter;
+          }
+        }
+        break;
+      } while(true);
       
       //Debug stuff
       //System.out.printf("\n%s:\n  Pos:  (%d, %d)\n  Size: %d\n\n",
@@ -54,9 +84,13 @@ class GameBoard {
     String strOut = "";
     
     for(Ship ship : aShips) {
+	  if(Battleship.ansi)
       strOut += String.format("%-10s - %s%s\n", ship,
-          ship.isFloating() ? ANSI_GREEN + "FLOATING" : ANSI_RED + "SUNK",
-          ANSI_RESET);
+        ship.isFloating() ? ANSI_GREEN + "FLOATING" : ANSI_RED + "SUNK",
+        ANSI_RESET);
+    else
+       strOut += String.format("%-10s - %s\n", ship,
+        ship.isFloating() ? "FLOATING" : "SUNK");
     }
     
     return strOut;
@@ -89,7 +123,7 @@ class GameBoard {
         String colour = "";
         
         for(Ship ship : aShips) {
-          nTile |= ship.statusOnTile(i, j);
+          nTile |= ship.statusOnTile(j, i);
         }
         switch(nTile) {
           case 0:
