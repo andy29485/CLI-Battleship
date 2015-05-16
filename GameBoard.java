@@ -22,17 +22,18 @@ class GameBoard {
     
     for(int i=0; i<5; i++) {
       if(i==4)
-        aShips[i] = new Ship(0, 0, true, 1, true);
+        aShips[i] = new Ship(11, 11, true, 1, true);
       else
-        aShips[i] = new Ship(0, 0, true, i);
-      
+        aShips[i] = new Ship(11, 11, true, i);
+    }
+    for(int i=0; i<5; i++) {
       System.out.printf("Position of new %s:\n  X(1-10): ", aShips[i]);
       String strX = keyboard.nextLine();
         
       System.out.print("  Y(1-10): ");
       String strY = keyboard.nextLine();
         
-      System.out.print("  Set vertical(y/n): ");
+      System.out.print("  Set horizontal(y/n): ");//My logic has failed
       aShips[i].setVert(keyboard.nextLine().matches("(?i)y.*"));
         
       if(strX.matches("\\d+") && strY.matches("\\d+")) {
@@ -71,6 +72,7 @@ class GameBoard {
       }
       
       //Debug stuff
+      System.out.println(this.print(true));
       //System.out.printf("\n%s:\n  Pos:  (%d, %d)\n  Size: %d\n\n",
       //  aShips[i],
       //  aShips[i].getX()+1,
@@ -90,11 +92,11 @@ class GameBoard {
     
     for(Ship ship : aShips) {
 	  if(Battleship.ansi)
-      strOut += String.format("%-10s - %s%s\n", ship,
+      strOut += String.format("%-19s - %s%s\n", ship,
         ship.isFloating() ? ANSI_GREEN + "FLOATING" : ANSI_RED + "SUNK",
         ANSI_RESET);
     else
-       strOut += String.format("%-10s - %s\n", ship,
+       strOut += String.format("%-19s - %s\n", ship,
         ship.isFloating() ? "FLOATING" : "SUNK");
     }
     
@@ -119,20 +121,24 @@ class GameBoard {
   public String print(boolean isPlayer) {
     String strOut = "+-+-+-+-+-+-+-+-+-+-+\n";
     
-    for(int i=0; i<10; i++) {
+    for(int i=0; i<10; i++) {//i - row - y pos
       strOut += "|";
       
-      for(int j=0; j<10; j++) {
+      for(int j=0; j<10; j++) {//j - col - x pos
         byte   nTile  = 0;
         char   cTile  = '?';
         String colour = "";
         
         for(Ship ship : aShips) {
-          nTile |= ship.statusOnTile(j, i);
+          nTile = (byte)ship.statusOnTile(j, i);
+          if(nTile != 0) {
+			cTile  = ship.getName().charAt(0);
+            break;
+		  }
         }
         switch(nTile) {
           case 0:
-            if((asGrid[j] & (short)Math.pow(2, i)) > 0) {
+            if((asGrid[i] & (short)Math.pow(2, j)) > 0) {
               colour = ANSI_YELLOW;
               cTile  = '^';
             }
@@ -144,7 +150,6 @@ class GameBoard {
           case 1:
             if(isPlayer) {
               colour = ANSI_GREEN;
-              cTile  = '@';
             }
             else {
               colour = ANSI_BLUE;
