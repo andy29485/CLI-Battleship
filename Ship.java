@@ -133,10 +133,6 @@ class Ship {
     return (anType&4) != 0;
   }
   
-  public boolean isVertical() {
-    return (anType&4) == 0;
-  }
-  
   public boolean hit(int nPosX, int nPosY) {
     if(isHorizontal()) {
       if(nPosY != getY() || nPosX < getX() || nPosX >= getX() + getSize())
@@ -181,7 +177,7 @@ class Ship {
         return "Battleship";
       
       case 3:
-        return "Carrier";
+        return "Aircraft Carrier";
       
       default:
         return "Unkown";
