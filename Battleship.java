@@ -39,7 +39,7 @@ public class Battleship {
           System.out.print("  Y(1-10): ");
           y = keyboard.nextInt(); keyboard.nextLine();
         } while (x > 10 || y > 10 || x <= 0 || y <= 0);
-        System.out.println(player2.getShot(y-1, x-1) ? "HIT" : "MISS");
+        System.out.println(player2.getShot(x-1, y-1) ? "HIT" : "MISS");
       }
       else {
         System.out.println("Player 2");
@@ -56,7 +56,7 @@ public class Battleship {
           System.out.print("  Y(1-10): ");
           y = keyboard.nextInt(); keyboard.nextLine();
         } while (x >= 10 || y >= 10);
-        System.out.println(player1.getShot(y-1, x-1) ? "HIT" : "MISS");
+        System.out.println(player1.getShot(x-1, y-1) ? "HIT" : "MISS");
       }
       bOnPlayer1 = !bOnPlayer1;
       System.out.println("Press return to continue to next player");
