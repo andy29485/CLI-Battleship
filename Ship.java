@@ -130,7 +130,7 @@ class Ship {
   }
   
   public boolean isHorizontal() {
-    return (anType&4) != 0;
+    return (anType&4) == 0;
   }
   
   public boolean hit(int nPosX, int nPosY) {
