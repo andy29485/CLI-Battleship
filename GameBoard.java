@@ -20,32 +20,33 @@ class GameBoard {
     
     Scanner keyboard = Battleship.keyboard;
     
+    aShips[0] = new Ship(11, 11, true, 0);       //Destroyer
+    aShips[1] = new Ship(11, 11, true, 1);       //Cruiser
+    aShips[2] = new Ship(11, 11, true, 1, true); //Submarine
+    aShips[3] = new Ship(11, 11, true, 2);       //Battleship
+    aShips[4] = new Ship(11, 11, true, 3);       //Aircraft Carrier
+    
+    Set_Ships:
     for(int i=0; i<5; i++) {
-      if(i==4)
-        aShips[i] = new Ship(11, 11, true, 1, true);
-      else
-        aShips[i] = new Ship(11, 11, true, i);
-    }
-    for(int i=0; i<5; i++) {
-      System.out.printf("Position of new %s:\n  X(1-10): ", aShips[i]);
+      System.out.printf("Position of %s:\n  X(1-10): ", aShips[i]);
       String strX = keyboard.nextLine();
         
       System.out.print("  Y(1-10): ");
       String strY = keyboard.nextLine();
         
-      System.out.print("  Set horizontal(y/n): ");//My logic has failed
+      System.out.print("  Set vertical(y/n): ");
       aShips[i].setVert(keyboard.nextLine().matches("(?i)y.*"));
-        
+      
       if(strX.matches("\\d+") && strY.matches("\\d+")) {
         int nX = Integer.valueOf(strX)-1;
         int nY = Integer.valueOf(strY)-1;
       
-        if(nY < 0 || nX < 0|| (aShips[i].isHorizontal()
+        if(nY < 0 || nX < 0 || (aShips[i].isHorizontal()
           ? (nY > 9 || nX + aShips[i].getSize() > 10)
           : (nX > 9 || nY + aShips[i].getSize() > 10) )) {
-            System.out.printf("Your %s has fallen off the Earth, The " +
-              "Divine Cosmic Turtle has given you another chance!\n",
-              aShips[i]);
+            System.out.printf("Your %s has fallen off the Earth!\n" +
+             "The Divine Cosmic Turtle has given you another chance!\n",
+             aShips[i]);
           i--;
           continue;
         }
@@ -67,12 +68,13 @@ class GameBoard {
             aShips[i],
             aShips[j]);
           i--;
-          continue;
+          continue Set_Ships;
         }
       }
       
-      //Debug stuff
       System.out.println(this.print(true));
+      
+      //Debug stuff
       //System.out.printf("\n%s:\n  Pos:  (%d, %d)\n  Size: %d\n\n",
       //  aShips[i],
       //  aShips[i].getX()+1,
@@ -132,9 +134,9 @@ class GameBoard {
         for(Ship ship : aShips) {
           nTile = (byte)ship.statusOnTile(j, i);
           if(nTile != 0) {
-			cTile  = ship.getName().charAt(0);
+            cTile  = ship.getName().charAt(0);
             break;
-		  }
+          }
         }
         switch(nTile) {
           case 0:
