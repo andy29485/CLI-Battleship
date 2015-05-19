@@ -24,6 +24,9 @@ public class Battleship {
       clear();
       
       if(bOnPlayer1) {
+        System.out.println("Press return to continue to Player 1");
+        keyboard.nextLine();
+        clear();
         System.out.println("Player 1");
         System.out.println(player2.print(false));
         System.out.println(player1.print(true));
@@ -41,6 +44,9 @@ public class Battleship {
         System.out.println(player2.getShot(x-1, y-1) ? "HIT" : "MISS");
       }
       else {
+        System.out.println("Press return to continue to Player 2");
+        keyboard.nextLine();
+        clear();
         System.out.println("Player 2");
         System.out.println(player1.print(false));
         System.out.println(player2.print(true));
@@ -58,7 +64,7 @@ public class Battleship {
         System.out.println(player1.getShot(x-1, y-1) ? "HIT" : "MISS");
       }
       bOnPlayer1 = !bOnPlayer1;
-      System.out.println("Press return to continue to next player");
+      System.out.println("Press return to continue");
       keyboard.nextLine();
     }
     keyboard.close();
