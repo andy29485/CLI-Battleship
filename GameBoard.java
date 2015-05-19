@@ -83,6 +83,109 @@ class GameBoard {
     }
   }
   
+  public GameBoard(boolean isAI) {
+    if(!isAI) {
+      asGrid = new short[10];
+      aShips = new Ship[5];
+      
+      Scanner keyboard = Battleship.keyboard;
+      
+      aShips[0] = new Ship(11, 11, true, 0);       //Destroyer
+      aShips[1] = new Ship(11, 11, true, 1);       //Cruiser
+      aShips[2] = new Ship(11, 11, true, 1, true); //Submarine
+      aShips[3] = new Ship(11, 11, true, 2);       //Battleship
+      aShips[4] = new Ship(11, 11, true, 3);       //Aircraft Carrier
+      
+      Set_Ships:
+      for(int i=0; i<5; i++) {
+        System.out.printf("Position of %s:\n  X(1-10): ", aShips[i]);
+        String strX = keyboard.nextLine();
+          
+        System.out.print("  Y(1-10): ");
+        String strY = keyboard.nextLine();
+          
+        System.out.print("  Set vertical(y/n): ");
+        aShips[i].setVert(keyboard.nextLine().matches("(?i)y.*"));
+        
+        if(strX.matches("\\d+") && strY.matches("\\d+")) {
+          int nX = Integer.valueOf(strX)-1;
+          int nY = Integer.valueOf(strY)-1;
+        
+          if(nY < 0 || nX < 0 || (aShips[i].isHorizontal()
+            ? (nY > 9 || nX + aShips[i].getSize() > 10)
+            : (nX > 9 || nY + aShips[i].getSize() > 10) )) {
+              System.out.printf("Your %s has fallen off the Earth!\n" +
+               "The Divine Cosmic Turtle has given you another chance!\n",
+               aShips[i]);
+            i--;
+            continue;
+          }
+
+          aShips[i].setX(nX);
+          aShips[i].setY(nY); 
+        }
+        else {
+          System.out.printf("(%s, %s) is not a valid position\n",
+            strX,
+            strY);
+          i--;
+          continue;
+        }
+        
+        for(int j=0; j<i; j++) {
+          if(aShips[i].intersects(aShips[j])) {
+            System.out.printf("Your %s is on top of %s \\o/\nTry again\n",
+              aShips[i],
+              aShips[j]);
+            i--;
+            continue Set_Ships;
+          }
+        }
+        
+        System.out.println(this.print(true));
+        
+        //Debug stuff
+        //System.out.printf("\n%s:\n  Pos:  (%d, %d)\n  Size: %d\n\n",
+        //  aShips[i],
+        //  aShips[i].getX()+1,
+        //  aShips[i].getY()+1,
+        //  aShips[i].getSize());
+      }
+      return;
+    }
+    asGrid = new short[10];
+    aShips = new Ship[5];
+    
+    aShips[0] = new Ship(11, 11, true, 0);       //Destroyer
+    aShips[1] = new Ship(11, 11, true, 1);       //Cruiser
+    aShips[2] = new Ship(11, 11, true, 1, true); //Submarine
+    aShips[3] = new Ship(11, 11, true, 2);       //Battleship
+    aShips[4] = new Ship(11, 11, true, 3);       //Aircraft Carrier
+    
+    Set_Ships:
+    for(int i=0; i<5; i++) {
+      int nX = (int)(Math.random()*10);
+      int nY = (int)(Math.random()*10);
+    
+      if(aShips[i].isHorizontal()
+       ? (nY > 9 || nX + aShips[i].getSize() > 10)
+       : (nX > 9 || nY + aShips[i].getSize() > 10) ) {
+        i--;
+        continue;
+      }
+
+      aShips[i].setX(nX);
+      aShips[i].setY(nY);
+      
+      for(int j=0; j<i; j++) {
+        if(aShips[i].intersects(aShips[j])) {
+          i--;
+          continue Set_Ships;
+        }
+      }
+    }
+  }
+  
   public boolean allShipsSunk() {
     for(Ship ship : aShips)
       if(ship.floating() > 0) return false;
