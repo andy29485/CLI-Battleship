@@ -72,12 +72,21 @@ class Ship {
       anType |= 4;
   }
   
-  public boolean isFloating() {
-    int parts = 0;
-    for(int i=0; i<5; i++) {
-      if(sectionHit(i)) parts++;
+  /*Retrun Values
+   * 0: No
+   * 1: Hit
+   * 2: Yes
+   */
+  public byte floating() {
+    int nPartsHit = 0;
+    for(int i=0; i<getSize(); i++) {
+      if(sectionHit(i))
+        nPartsHit++;
     }
-    return getSize() > parts;
+    //System.out.printf("%s(%d): %d\n", toString(), getSize(), nPartsHit);
+    if(getSize() <= nPartsHit)
+      return 0;
+    return (byte)(nPartsHit == 0 ? 2 : 1);
   }
   
   public boolean intersects(Ship ship) {
@@ -133,18 +142,23 @@ class Ship {
     return (anType&4) == 0;
   }
   
-  public boolean hit(int nPosX, int nPosY) {
+  /*Return values
+   * 0: No hit
+   * 1: Hit
+   * 2: Sunk
+   */
+  public byte hit(int nPosX, int nPosY) {
     if(isHorizontal()) {
       if(nPosY != getY() || nPosX < getX() || nPosX >= getX() + getSize())
-        return false;
-      abPartsHit |= (int)Math.pow(2, (nPosX-getX()+1));
+        return 0;
+      abPartsHit |= (int)Math.pow(2, (nPosX-getX()));
     }
     else {
       if(nPosX != getX() || nPosY < getY() || nPosY >= getY() + getSize())
-        return false;
-      abPartsHit |= (int)Math.pow(2, (nPosY-getY()+1));
+        return 0;
+      abPartsHit |= (int)Math.pow(2, (nPosY-getY()));
     }
-    return true;
+    return (byte)(floating() < 2 ? 1 : 2);
   }
   
   /*Return values
@@ -152,16 +166,16 @@ class Ship {
    * 1: On tile, not hit
    * 2: Hit
    */
-  public int statusOnTile(int nPosX, int nPosY) {
+  public byte statusOnTile(int nPosX, int nPosY) {
     if(isHorizontal()) {
       if(nPosY != getY() || nPosX < getX() || nPosX >= (getX() + getSize()))
         return 0;
-      return sectionHit(nPosX-getX()+1) ? 2 : 1;
+      return (byte)(sectionHit(nPosX-getX()) ? 2 : 1);
     }
     else {
       if(nPosX != getX() || nPosY < getY() || nPosY >= (getY() + getSize()))
         return 0;
-      return sectionHit(nPosY-getY()+1) ? 2 : 1;
+      return (byte)(sectionHit(nPosY-getY()) ? 2 : 1);
     }
   }
   
