@@ -85,38 +85,61 @@ class GameBoard {
   
   public boolean allShipsSunk() {
     for(Ship ship : aShips)
-      if(ship.isFloating()) return false;
+      if(ship.floating() > 0) return false;
     return true;
   }
   
   public String status() {
-    String strOut = "";
+    String strOut    = "";
+    String strColour = "";
+    String strStatus = "";
     
     for(Ship ship : aShips) {
-	  if(Battleship.ansi)
-      strOut += String.format("%-19s - %s%s\n", ship,
-        ship.isFloating() ? ANSI_GREEN + "FLOATING" : ANSI_RED + "SUNK",
-        ANSI_RESET);
-    else
-       strOut += String.format("%-19s - %s\n", ship,
-        ship.isFloating() ? "FLOATING" : "SUNK");
+      switch(ship.floating()) {
+        case 0:
+          strStatus = "SUNK";
+          strColour = ANSI_RED;
+          break;
+        case 1:
+          strStatus = "HIT";
+          strColour = ANSI_YELLOW;
+          break;
+        case 1:
+          strStatus = "FLOATING";
+          strColour = ANSI_GREEN;
+          break;
+      }
+      if(Battleship.ansi)
+        strOut += String.format("%-19s - %s%s%s\n",
+          ship,
+          strColour,
+          strStatus,
+          ANSI_RESET);
+      else
+         strOut += String.format("%-19s - %s\n",
+          ship,
+          strStatus);
     }
     
     return strOut;
   }
   
-  public boolean getShot(int nPosX, int nPosY) {
+  public String getShot(int nPosX, int nPosY) {
     if(nPosX > 10 || nPosY > 10)
-      return false;
+      return "Artillery batteries, misfire";//this should never happen
     
-    boolean wasHit = false;
-    
+    byte nHit = 0;
+    byte i;
     asGrid[nPosY] |= (short)Math.pow(2, nPosX);
-    for(Ship ship : aShips) {
-      wasHit = wasHit || ship.hit(nPosX, nPosY);
-    }
     
-    return wasHit;
+    for(i=0; i<aShips.length; i++) {
+      nHit = aShips[i].hit(nPosX, nPosY);
+      if(nHit != 0)
+        break;
+    }
+    if(nHit == 0)
+      return "MISS";
+    return (nHit == 1 ? "HIT " : "SUNK ") + aShips[i];
   }
   
   //set isPlayer to false to dissable printing of ships(unless hit)
@@ -132,7 +155,7 @@ class GameBoard {
         String colour = "";
         
         for(Ship ship : aShips) {
-          nTile = (byte)ship.statusOnTile(j, i);
+          nTile = ship.statusOnTile(j, i);
           if(nTile != 0) {
             cTile  = ship.getName().charAt(0);
             break;

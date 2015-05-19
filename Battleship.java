@@ -32,16 +32,27 @@ public class Battleship {
         System.out.println(player1.print(true));
         System.out.println(player1.status());
         
+        String strX;
+        String strY;
         int x; 
         int y;
         do {
           System.out.printf("Location to attack\n  X(1-10): ");
-          x = keyboard.nextInt(); keyboard.nextLine();
+          strX = keyboard.nextLine();
           
           System.out.print("  Y(1-10): ");
-          y = keyboard.nextInt(); keyboard.nextLine();
+          strY = keyboard.nextLine();
+          
+          if(strX.matches("\\d+") && strX.matches("\\d+")) {
+            x = Integer.valueOf(strX);
+            y = Integer.valueOf(strY);
+          }
+          else {
+            x = 0;
+            y = 0;
+          }
         } while (x > 10 || y > 10 || x <= 0 || y <= 0);
-        System.out.println(player2.getShot(x-1, y-1) ? "HIT" : "MISS");
+        System.out.println(player2.getShot(x-1, y-1));
       }
       else {
         System.out.println("Press return to continue to Player 2");
@@ -52,16 +63,27 @@ public class Battleship {
         System.out.println(player2.print(true));
         System.out.println(player2.status());
         
+        String strX;
+        String strY;
         int x; 
         int y;
         do {
           System.out.printf("Location to attack\n  X(1-10): ");
-          x = keyboard.nextInt(); keyboard.nextLine();
+          strX = keyboard.nextLine();
           
           System.out.print("  Y(1-10): ");
-          y = keyboard.nextInt(); keyboard.nextLine();
-        } while (x >= 10 || y >= 10);
-        System.out.println(player1.getShot(x-1, y-1) ? "HIT" : "MISS");
+          strY = keyboard.nextLine();
+          
+          if(strX.matches("\\d+") && strX.matches("\\d+")) {
+            x = Integer.valueOf(strX);
+            y = Integer.valueOf(strY);
+          }
+          else {
+            x = 0;
+            y = 0;
+          }
+        } while (x > 10 || y > 10 || x <= 0 || y <= 0);
+        System.out.println(player1.getShot(x-1, y-1));
       }
       bOnPlayer1 = !bOnPlayer1;
       System.out.println("Press return to continue");
