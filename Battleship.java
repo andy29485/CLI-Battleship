@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.awt.Color;
 
 public class Battleship {
   public static Scanner keyboard;
