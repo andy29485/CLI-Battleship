@@ -104,7 +104,7 @@ class GameBoard {
           strStatus = "HIT";
           strColour = ANSI_YELLOW;
           break;
-        case 1:
+        case 2:
           strStatus = "FLOATING";
           strColour = ANSI_GREEN;
           break;
