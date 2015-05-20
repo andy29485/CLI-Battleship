@@ -37,11 +37,42 @@ public class Battleship {
         System.out.println("Press return to continue to Player 1");
         keyboard.nextLine();
         clear();
-        System.out.println("Player 1");
-        System.out.println(player2.print(false));
-        System.out.println(player1.print(true));
-        System.out.println(player1.status());
+        System.out.println("                       "+
+                           "                Player 1");
+        String[]  enemy_board = player2.print(false).split("\n");
+        String[] player_board = player1.print(true ).split("\n");
         
+        String[]  enemy_status = player2.status().split("\n");
+        String[] player_status = player1.status().split("\n");
+        
+        System.out.println("                    "+
+          "|-----player--2-----|   |-----player--1----|");
+        System.out.println("                    "+
+          " 1 2 3 4 5 6 7 8 9 10    1 2 3 4 5 6 7 8 9 10");
+        for(int i=0; i<19; i++) {
+          System.out.printf("              %s(%02d) %s   %s\n",
+           (i%2==1 ? (char)(65+i/2) : ' '),
+           i+1,
+            enemy_board[i],
+           player_board[i]);
+        }
+        
+        if(ansi) {
+          for(int i=0; i<5; i++) {
+            System.out.printf("%-27s%-23s | %24s\n",
+             player1.getShips()[i].toString(),
+              enemy_status[i],
+             player_status[i]);
+          }
+        }
+        else {
+          for(int i=0; i<5; i++) {
+            System.out.printf("%-27s%-14s | %15s\n",
+             player1.getShips()[i].toString(),
+              enemy_status[i],
+             player_status[i]);
+          }
+        }
         String strX;
         String strY;
         int x; 
@@ -69,10 +100,42 @@ public class Battleship {
           System.out.println("Press return to continue to Player 2");
           keyboard.nextLine();
           clear();
-          System.out.println("Player 2");
-          System.out.println(player1.print(false));
-          System.out.println(player2.print(true));
-          System.out.println(player2.status());
+        System.out.println("                       "+
+                           "                Player 2");
+          String[]  enemy_board = player1.print(false).split("\n");
+          String[] player_board = player2.print(true ).split("\n");
+          
+          String[]  enemy_status = player1.status().split("\n");
+          String[] player_status = player2.status().split("\n");
+          
+          System.out.println("                    "+
+          "|-----player--2-----|   |-----player--1----|");
+        System.out.println("                    "+
+          " 1 2 3 4 5 6 7 8 9 10    1 2 3 4 5 6 7 8 9 10");
+        for(int i=0; i<19; i++) {
+          System.out.printf("              %s(%02d) %s   %s\n",
+           (i%2==1 ? (char)(65+i/2) : ' '),
+           i+1,
+            enemy_board[i],
+           player_board[i]);
+        }
+        
+        if(ansi) {
+          for(int i=0; i<5; i++) {
+            System.out.printf("%-27s%-23s | %24s\n",
+             player1.getShips()[i].toString(),
+              enemy_status[i],
+             player_status[i]);
+          }
+        }
+        else {
+          for(int i=0; i<5; i++) {
+            System.out.printf("%-27s%-14s | %15s\n",
+             player1.getShips()[i].toString(),
+              enemy_status[i],
+             player_status[i]);
+          }
+        }
           
           String strX;
           String strY;

@@ -83,6 +83,10 @@ class GameBoard {
     }
   }
   
+  public Ship[] getShips() {
+    return aShips;
+  }
+  
   public GameBoard(boolean isAI) {
     if(!isAI) {
       asGrid = new short[10];
@@ -213,15 +217,12 @@ class GameBoard {
           break;
       }
       if(Battleship.ansi)
-        strOut += String.format("%-19s - %s%s%s\n",
-          ship,
+        strOut += String.format("%s%s%s\n",
           strColour,
           strStatus,
           ANSI_RESET);
       else
-         strOut += String.format("%-19s - %s\n",
-          ship,
-          strStatus);
+         strOut += String.format("%s\n", strStatus);
     }
     
     return strOut;
