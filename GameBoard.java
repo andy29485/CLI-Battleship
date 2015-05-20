@@ -224,7 +224,13 @@ class GameBoard {
     return strOut;
   }
   
-  public String getShot(int nPosX, int nPosY) {
+  public boolean wasShot(int nPosX, int nPosY) {
+    if(nPosX >= 10 || nPosY > 10 || nPosX < 0 || nPosY < 0)
+      return false;
+    return (asGrid[nPosY] & (short)Math.pow(2, nPosX)) > 0;
+  }
+  
+  public String hit(int nPosX, int nPosY) {
     if(nPosX > 10 || nPosY > 10)
       return "Artillery batteries, misfire";//this should never happen
     

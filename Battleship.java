@@ -96,8 +96,12 @@ public class Battleship {
             x = 0;
             y = 0;
           }
+          if(player2.wasShot(x-1, y-1)) {
+            System.out.println("Ya shot there before, y'know?");
+            continue;
+          }
         } while (x > 10 || y > 10 || x <= 0 || y <= 0);
-        System.out.println(player2.getShot(x-1, y-1));
+        System.out.println(player2.hit(x-1, y-1));
       }
       else {
         if(!ai) {
@@ -163,11 +167,15 @@ public class Battleship {
               x = 0;
               y = 0;
             }
-          } while (x > 10 || y > 10 || x <= 0 || y <= 0);
-          System.out.println(player1.getShot(x-1, y-1));
+            if(player1.wasShot(x-1, y-1)) {
+              System.out.println("Ya shot there before, y'know?");
+            continue;
+          }
+        } while (x > 10 || y > 10 || x <= 0 || y <= 0);
+        System.out.println(player1.hit(x-1, y-1));
         }
         else {
-          player1.getShot(
+          player1.hit(
             (int)(Math.random()*10),
             (int)(Math.random()*10));
         }
