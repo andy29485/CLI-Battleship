@@ -88,7 +88,7 @@ public class Battleship {
           System.out.print("  Y(1-10): ");
           strY = keyboard.nextLine();
           
-          if(strX.matches("\\d+") && strX.matches("\\d+")) {
+          if(strX.matches("\\d+") && strY.matches("\\d+")) {
             x = Integer.valueOf(strX);
             y = Integer.valueOf(strY);
           }
@@ -155,7 +155,7 @@ public class Battleship {
             System.out.print("  Y(1-10): ");
             strY = keyboard.nextLine();
             
-            if(strX.matches("\\d+") && strX.matches("\\d+")) {
+            if(strX.matches("\\d+") && strY.matches("\\d+")) {
               x = Integer.valueOf(strX);
               y = Integer.valueOf(strY);
             }
