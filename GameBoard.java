@@ -55,6 +55,7 @@ class GameBoard {
 
         aShips[i].setX(nX);
         aShips[i].setY(nY);
+        aShips[i].setVert(((int)(Math.random()*2))%2==0);
         
         for(int j=0; j<i; j++) {
           if(aShips[i].intersects(aShips[j])) {

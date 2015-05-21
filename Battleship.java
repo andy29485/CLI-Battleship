@@ -12,7 +12,7 @@ public class Battleship {
     GameBoard player2;
     
     System.out.print("Do ANSI Colours work(Are you using *NIX)[y/n]: ");
-    ansi = keyboard.next().matches("(?i)y.*"); keyboard.nextLine();
+    ansi = keyboard.nextLine().matches("(?i)y.*");
     
     clear();
     System.out.println("Player 1");
@@ -20,7 +20,7 @@ public class Battleship {
     
     clear();
     System.out.print("Is player 2 to be an AI[y/n]: ");
-    ai = keyboard.next().matches("(?i)y.*"); keyboard.nextLine();
+    ai = keyboard.nextLine().matches("(?i)y.*");
     if(!ai) {
       clear();
       System.out.println("Player 2");
@@ -100,7 +100,7 @@ public class Battleship {
             System.out.println("Ya shot there before, y'know?");
             continue;
           }
-        } while (x > 10 || y > 10 || x <= 0 || y <= 0);
+        } while (x > 10 || y > 10 || x <= 0 || y <= 0 || player2.wasShot(x-1, y-1));
         System.out.println(player2.hit(x-1, y-1));
       }
       else {
@@ -171,7 +171,7 @@ public class Battleship {
               System.out.println("Ya shot there before, y'know?");
             continue;
           }
-        } while (x > 10 || y > 10 || x <= 0 || y <= 0);
+        } while (x > 10 || y > 10 || x <= 0 || y <= 0 || player1.wasShot(x-1, y-1));
         System.out.println(player1.hit(x-1, y-1));
         }
         else {
