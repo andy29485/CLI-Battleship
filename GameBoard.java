@@ -115,7 +115,7 @@ class GameBoard {
         }
         
         String[]board = print(true).split("\n");
-        System.out.println(" 1 2 3 4 5 6 7 8 9 10");
+        System.out.println("         1 2 3 4 5 6 7 8 9 10");
         for(int j=0; j<21; j++) {
           System.out.printf("  %s%s %s\n",
            (j%2==1 ? (char)(65+j/2) : ' '),
