@@ -28,8 +28,7 @@ class Ship {
   }
   
   //orientation: odd: vert, even: horiz
-  public Ship(int nPosX, int nPosY, int nOrientation,
-              int nSize) {
+  public Ship(int nPosX, int nPosY, int nOrientation, int nSize) {
     anPos      = (byte)(nPosX << 4         | nPosY  );
     anType     = (byte)(4*(nOrientation&1) | nSize&3);
     abPartsHit = 0;
