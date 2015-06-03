@@ -11,7 +11,3 @@ Run the Battleship class from the dir with all the class files to play
 
 ## Playing
 Look up the [rules on google](http://lmgtfy.com/?q=Battleship+rules "Rules")  
-  
-Note:  
-  * This is a 2 player game
-  * NO AIs
